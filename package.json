@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --devtool eval --progress --colors --content-base demo/build --hot --inline",
-    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js"
+    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile"
   },
   "author": "tom-s",
   "keywords": [
@@ -40,6 +42,7 @@
     "json-loader": "^0.5.4",
     "lodash": "^3.10.0",
     "npm": "^3.5.2",
-    "rangy": "^1.3.0"
+    "rangy": "^1.3.0",
+    "speak-tts": "^0.2.3"
   }
 }

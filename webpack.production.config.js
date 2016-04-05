@@ -8,7 +8,7 @@ var config = {
         demo: [ path.resolve(__dirname, 'demo/demo.js') ],
     },
     output: {
-        path: path.resolve(__dirname, 'demo/dist'),
+        path: path.resolve(__dirname, 'demo/build'),
         filename: '[name].bundle.js'
     },
     resolve: {
@@ -17,17 +17,17 @@ var config = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js?$/,
                 exclude: /node_modules/,
-                loader: "babel",
+                loader: "babel-loader",
                 query: {
                   plugins: ['transform-runtime'],
-                  presets: ['es2015', 'stage-0']
+                  presets: ['es2015']
                 }
             },
             {
                 include: /\.json$/, loaders: ["json-loader"],
-                extensions: ['', '.json', '.jsx', '.js']
+                extensions: ['', '.json', '.js']
             }
         ],
     }

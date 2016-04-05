@@ -17,17 +17,17 @@ var config = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
                 query: {
                   plugins: ['transform-runtime'],
-                  presets: ['es2015', 'stage-0']
+                  presets: ['es2015']
                 }
             },
             {
                 include: /\.json$/, loaders: ["json-loader"],
-                extensions: ['', '.json', '.jsx', '.js']
+                extensions: ['', '.json', '.js']
             }
         ],
     }
