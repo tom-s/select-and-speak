@@ -22,7 +22,8 @@ See browser support here : http://caniuse.com/#feat=speech-synthesis
 Import the component :
 
 ```bash
-import Speech from './utils/speech.js';
+import Speech from 'select-and-speak' // es6
+// var Speech = require('select-and-speak') //if you use es5
 ```
 
 Start the component :
