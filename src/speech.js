@@ -13,9 +13,7 @@ const Speech = ((window) => {
       'pitch': 1,
     },
 		'textSelection' : {
-			'activated': true,
-			'wordWrap': true,
-			'mobileOnly': true,
+			'wordwrap': true,
 			'button': {
 				'tag': 'div', // main wrapper of button
 				'content': '<p>Click here to listen</p>' // content of button
@@ -66,7 +64,6 @@ const Speech = ((window) => {
 	}
 
 	const _addVoicesList = (voices) => {
-    console.log("add voices list ? ", voices)
 		let list = window.document.createElement('div')
 		list.innerHTML += '<h2>Voices</h2><p>'
 		voices.forEach((voice) => {
@@ -77,9 +74,8 @@ const Speech = ((window) => {
 	}
 
 	const _addTouchButton  = () => {
-		const button = window.document.createElement('')
-		button.innerHTML = "Select some text and click here"
-		button.style.height = '50px'
+		const button = window.document.createElement(CONF.textSelection.button.tag)
+		button.innerHTML = CONF.textSelection.button.content
 		window.document.body.appendChild(button)
 		return button
 	}
