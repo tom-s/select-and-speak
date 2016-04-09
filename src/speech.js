@@ -2,7 +2,6 @@ import _ from 'lodash'
 import rangy from 'rangy/lib/rangy-textrange'
 import Speak from 'speak-tts'
 
-console.log("speak", Speak)
 const Speech = ((window) => {
 	
 	let CONF = {
