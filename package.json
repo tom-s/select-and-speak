@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --devtool eval --progress --colors --content-base demo/build --hot --inline",
     "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
-    "compile": "babel -d lib/ src/",
+    "compile": "vbabel -d lib/ src/",
     "prepublish": "npm run compile"
   },
   "author": "tom-s",
@@ -36,6 +36,7 @@
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
+    "babel-cli": "^6.7.5",
     "franc": "^1.1.2",
     "imports-loader": "^0.6.5",
     "install": "^0.4.1",
