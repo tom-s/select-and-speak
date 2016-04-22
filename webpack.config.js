@@ -1,9 +1,10 @@
 // webpack.config.js
-var path = require('path');
-var webpack = require('webpack');
-var node_modules = path.resolve(__dirname, 'node_modules');
+const path = require('path')
+const webpack = require('webpack')
+const node_modules = path.resolve(__dirname, 'node_modules')
+const pathToReact = path.resolve(node_modules, 'react/dist/react.js')
 
-var config = {
+const config = {
     entry: {
         demo: [ path.resolve(__dirname, 'demo/demo.js') ],
     },
@@ -12,25 +13,29 @@ var config = {
         filename: '[name].bundle.js'
     },
     resolve: {
-        alias: {}
+      extensions: ['', '.js', '.jsx']
     },
     module: {
         loaders: [
             {
                 test: /\.js?$/,
                 exclude: /node_modules/,
-                loader: "babel-loader",
-                query: {
-                  plugins: ['transform-runtime'],
-                  presets: ['es2015']
-                }
+                loaders: ['babel']
+            },
+            {
+                test: /\.scss$/,
+                loader: "style!css!sass?outputStyle=expanded=includePaths[]=" + node_modules + "/bootstrap-sass/assets/stylesheets/"
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|woff|woff2|eot|ttf|svg)$/,
+                loader: 'url-loader?limit=100000'
             },
             {
                 include: /\.json$/, loaders: ["json-loader"],
-                extensions: ['', '.json', '.js']
+                extensions: ['', '.json', '.jsx', '.js']
             }
         ],
     }
-};
+}
 
-module.exports = config;
+module.exports = config

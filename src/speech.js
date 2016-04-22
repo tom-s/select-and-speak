@@ -1,9 +1,8 @@
-import _ from 'lodash'
 import rangy from 'rangy/lib/rangy-textrange'
 import Speak from 'speak-tts'
 
 const Speech = ((window) => {
-	
+
 	let CONF = {
     'speak': {
       //'lang' : 'en-GB', // if no language specified, automatic detection will be done
@@ -20,46 +19,47 @@ const Speech = ((window) => {
 		}
 	}
 
-	function _init(conf) {
+	function _init(conf = {speak: null}) {
 		// Import conf
-		if(conf) CONF =_.merge(CONF, conf)
+    const { speak } = conf
+		if(conf) CONF = { ...CONF, ...conf }
 
 		// Polyfill
 		if(!Speak.browserSupport()) {
 			return false
 		} else {
-
-      const SpeakConf = _.merge(CONF.speak, {
+      const voicesLoaded = {
         onVoicesLoaded: (data) => {
           const { voices } = data
           _addVoicesList(voices)
-          if(_.get(conf, 'speak.voicesLoaded')) {
-            conf.speak.voicesLoaded(voices)
+          if(speak && speak.voicesLoaded) {
+            speak.voicesLoaded(voices)
           }
         }
-      })
+      }
+      const SpeakConf = { ...CONF.speak, ...voicesLoaded}
 			Speak.init(SpeakConf)
 		}
 
 		// Start listening to events
 		if(_touchSupport()) {
 			// Append button
-			let button =_addTouchButton();
+			const button =_addTouchButton();
 			button.addEventListener('click', (e) => {
-				let text = _getSelectedText();
+				const text = _getSelectedText()
 				Speak.speak({
 					text: text
-				});
-			});
+				})
+			})
 		} else {
 			window.addEventListener('mouseup', (e) => {
-				let text = _getSelectedText();
+				const text = _getSelectedText()
 				Speak.speak({
 					text: text
-				});
-				e.preventDefault();
-			});
-		}		
+				})
+				e.preventDefault()
+			})
+		}
 	}
 
 	const _addVoicesList = (voices) => {
@@ -73,18 +73,20 @@ const Speech = ((window) => {
 	}
 
 	const _addTouchButton  = () => {
-		const button = window.document.createElement(CONF.textSelection.button.tag)
-		button.innerHTML = CONF.textSelection.button.content
+    const { textSelection } = CONF
+		const button = window.document.createElement(textSelection.button.tag)
+		button.innerHTML = textSelection.button.content
 		window.document.body.appendChild(button)
 		return button
 	}
-	
+
 	const _touchSupport = () => {
 		return ('ontouchstart' in window || navigator.maxTouchPoints) // works on IE10/11 and Surface
 	}
 
 	const _getSelectedText = () => {
-		if(CONF.textSelection.wordwrap) rangy.getSelection().expand('word') // expand selection to word so that we don't have half words
+    const { textSelection } = CONF
+		if(textSelection.wordwrap) rangy.getSelection().expand('word') // expand selection to word so that we don't have half words
 	  return rangy.getSelection().toString()
 	}
 
