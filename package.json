@@ -1,12 +1,12 @@
 {
   "name": "select-and-speak",
-  "version": "0.2.5",
+  "version": "1.0.0",
   "description": "Select and speak",
   "main": "lib/speech.js",
   "scripts": {
-    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base demo/build --hot --inline",
-    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
-    "compile": "node_modules/.bin/babel -d lib/ src/",
+    "start": "webpack-dev-server --devtool eval --progress --colors --content-base demo/build --hot --inline --mode development",
+    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js --mode production",
+    "compile": "npx babel -d lib/ src/",
     "prepublish": "npm run compile"
   },
   "author": "tom-s",
@@ -20,31 +20,18 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-core": "^6.3.15",
-    "babel-eslint": "^5.0.0-beta4",
-    "babel-loader": "^6.2.0",
-    "babel-plugin-transform-decorators": "^6.5.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-polyfill": "^6.5.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-react-hmre": "^1.1.0",
-    "babel-preset-stage-0": "^6.3.13",
-    "babel-preset-stage-2": "^6.5.0",
-    "css-loader": "^0.15.5",
-    "file-loader": "^0.8.4",
-    "style-loader": "^0.12.3",
-    "url-loader": "^0.5.6",
-    "webpack": "^1.10.5",
-    "webpack-dev-server": "^1.10.1"
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "json-loader": "^0.5.4",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
-    "imports-loader": "^0.6.5",
-    "install": "^0.4.1",
-    "json-loader": "^0.5.4",
-    "npm": "^3.5.2",
+    "lodash": "^4.17.11",
     "rangy": "^1.3.0",
-    "speak-tts": "^0.2.3"
+    "speak-tts": "^2.0.6"
   }
 }

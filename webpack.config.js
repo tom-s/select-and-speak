@@ -1,10 +1,7 @@
 // webpack.config.js
-const path = require('path')
-const webpack = require('webpack')
-const node_modules = path.resolve(__dirname, 'node_modules')
-const pathToReact = path.resolve(node_modules, 'react/dist/react.js')
+var path = require('path');
 
-const config = {
+var config = {
     entry: {
         demo: [ path.resolve(__dirname, 'demo/demo.js') ],
     },
@@ -12,30 +9,21 @@ const config = {
         path: path.resolve(__dirname, 'demo/build'),
         filename: '[name].bundle.js'
     },
-    resolve: {
-      extensions: ['', '.js', '.jsx']
-    },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.js?$/,
-                exclude: /node_modules/,
-                loaders: ['babel']
-            },
-            {
-                test: /\.scss$/,
-                loader: "style!css!sass?outputStyle=expanded=includePaths[]=" + node_modules + "/bootstrap-sass/assets/stylesheets/"
-            },
-            {
-                test: /\.(png|jpg|jpeg|gif|woff|woff2|eot|ttf|svg)$/,
-                loader: 'url-loader?limit=100000'
-            },
-            {
-                include: /\.json$/, loaders: ["json-loader"],
-                extensions: ['', '.json', '.jsx', '.js']
+            test: /\.(js)$/,
+            exclude: /node_modules/,
+            use: ['babel-loader']
             }
-        ],
+        ]
+    },
+    resolve: {
+        extensions: ['*', '.js']
+    },
+    devServer: {
+        contentBase: path.resolve(__dirname, 'demo/build')
     }
-}
+};
 
-module.exports = config
+module.exports = config;

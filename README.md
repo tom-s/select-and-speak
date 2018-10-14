@@ -9,7 +9,7 @@ npm install select-and-speak
 
 ## Description
 
-Select (highlight) text in your browser and in order to have spoken by speech synthesis. Use https://github.com/tom-s/speak-tts for the speech capability and language detection
+Select (highlight) text in your browser and have it spoken by speech synthesis. Use https://github.com/tom-s/speak-tts for the speech synthesis.
 
 See browser support here : http://caniuse.com/#feat=speech-synthesis
 
@@ -28,73 +28,54 @@ import Speech from 'select-and-speak' // es6
 
 Start the component :
 ```bash
-Speech.init();
+const speech = new Speech()
+speech.init().then((data) => {
+	// The "data" object contains the list of available voices and the voice synthesis params
+	console.log("Speech is ready, voices are available", data)
+}).catch(e => {
+	console.error("An error occured while initializing : ", e)
+})
 ```
 
-You can pass the following properties at init time:
-- volume
-- rate
-- pitch
-- lang : if you don't pass a language, the language of the selected text will be automatically detected thanks to franc (https://github.com/wooorm/franc). If you pass a language, this will be used for all audio outputs (nevertheless the language of the selected text)
-
 ```bash
-// Example with full conf
+// Exemple with conf
 Speech.init({
-    'speak': { // CONF for speak-tts
-      //'lang' : 'en-GB', // if no language specified, automatic detection will be done
-      'volume': 1,
-      'rate': 1,
-      'pitch': 1,
-    },
-    'textSelection' : {
-      'wordwrap': true,
-      'button': { // button displayed on touch devices
-        'tag': 'div', // main wrapper of button
-        'content': '<p>Click here to listen</p>' // content of button
-      }
-    }
+    'wordwrap': true, // default: whether or not selection should be expanded to the end of the word
+    'autospeak': true // default: whether or not text should be spoken on selection (mouseUp or touchEnd event)
+    // you can also add similar options to the ones in init() from https://github.com/tom-s/speak-tts
 });
 ```
 
-## Supported languages
-  "ar-SA" // arabic
-  "cs-CZ" // czech
-  "da-DK" // danish
-  "de-DE" // german
-  "el-GR" // greek
-  "en-AU" // australian
-  "en-GB" // english
-  "en-IE"
-  "en-US"
-  "en-US"
-  "en-ZA"
-  "es-ES" // spanish
-  "es-MX"
-  "fi-FI" // finish
-  "fr-CA"
-  "fr-FR" // french
-  "he-IL" // hebrew
-  "hi-IN" // hindi
-  "hu-HU" // hungarian
-  "id-ID" // indonesian
-  "it-IT" // italian
-  "ja-JP" // japanese
-  "ko-KR" // korean
-  "nl-NL" // dutch
-  "no-NO" // norwegian
-  "pl-PL" // polish
-  "pt-BR" // portuguese brazilian
-  "pt-PT" // portuguese
-  "ro-RO" // romanian
-  "ru-RU" // russian
-  "sk-SK" // slovak
-  "sv-SE" // swedish
-  "th-TH" // thai
-  "tr-TR" // turkish
-  "zh-CN" // chinese (S)
-  "zh-HK" // chinese hong kong
-  "zh-TW" // chinese (T'en-US';
+The Speech class inherits from the class provided by speak-tts. It means all the methods from speak-tts are available, plus the following:
+- setWordwrap(bool)
+- setAutospeak(bool)
+-	speakSelectedText(options = {})
+- getSelectedText()
+- for the remaining methods please check out https://github.com/tom-s/speak-tts
 
+Set wordwrap :
+
+```javascript
+speech.setWordwrap(false)
+```
+
+Set autospeak :
+
+```javascript
+speech.setAutospeak(false)
+```
+
+Speak the current selection :
+
+```javascript
+speech.speakSelectedText() // you can add similar options to the ones in speak() from  https://github.com/tom-s/speak-tts
+```
+
+Get current text selection :
+
+```javascript
+speech.getSelectedText({})
+```
 
 ## Tests
 
