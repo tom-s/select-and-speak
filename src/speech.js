@@ -1,100 +1,70 @@
 import rangy from 'rangy/lib/rangy-textrange'
-import Speak from 'speak-tts'
+import Speech from 'speak-tts'
+import get from 'lodash/get'
 
-const Speech = ((window) => {
-
-	let CONF = {
-    'speak': {
-      //'lang' : 'en-GB', // if no language specified, automatic detection will be done
-      'volume': 1,
-      'rate': 1,
-      'pitch': 1,
-    },
-		'textSelection' : {
-			'wordwrap': true,
-			'button': {
-				'tag': 'div', // main wrapper of button
-				'content': '<p>Click here to listen</p>' // content of button
-			}
-		}
+class SelectAndSpeak extends Speech {
+	constructor(props) {
+		super(props)
+		this.wordwrap = null
+		this.autospeak = null
+		this.touchMode = null
 	}
 
-	function _init(conf = {speak: null}) {
-		// Import conf
-    const { speak } = conf
-		if(conf) CONF = { ...CONF, ...conf }
+	init(options) {
+		return new Promise((resolve, reject) => {
+			super.init(options)
+				.then((data) => {
+					this.wordwrap = get(options, 'wordwrap', true)
+					this.autospeak = get(options, 'autospeak', true)
 
-		// Polyfill
-		if(!Speak.browserSupport()) {
-			return false
-		} else {
-      const voicesLoaded = {
-        onVoicesLoaded: (data) => {
-          const { voices } = data
-          _addVoicesList(voices)
-          if(speak && speak.voicesLoaded) {
-            speak.voicesLoaded(voices)
-          }
-        }
-      }
-      const SpeakConf = { ...CONF.speak, ...voicesLoaded}
-			Speak.init(SpeakConf)
-		}
+					window.addEventListener('mousedown', () => {
+						this.touchMode = false
+					})
 
-		// Start listening to events
-		if(_touchSupport()) {
-			// Append button
-			const button =_addTouchButton();
-			button.addEventListener('click', (e) => {
-				const text = _getSelectedText()
-				Speak.speak({
-					text: text
-				})
-			})
-		} else {
-			window.addEventListener('mouseup', (e) => {
-				const text = _getSelectedText()
-				Speak.speak({
-					text: text
-				})
-				e.preventDefault()
-			})
-		}
-	}
+					window.addEventListener('touchstart', () => {
+						this.touchMode = true
+					})
 
-	const _addVoicesList = (voices) => {
-		let list = window.document.createElement('div')
-		list.innerHTML += '<h2>Voices</h2><p>'
-		voices.forEach((voice) => {
-			list.innerHTML += voice.name + ' (' + voice.lang + ')' + ' '
+					window.addEventListener('mouseup', e => {
+						if(!this.touchMode && this.autospeak) {
+							this.speakSelectedText(e)
+							e.preventDefault()
+						}
+					})
+
+					window.addEventListener('touchend', e => {
+						if(this.touchMode && this.autospeak) {
+							this.speakSelectedText(e)
+							e.preventDefault()
+						}
+					})
+					resolve(data)
+				}).catch(e => reject(e))
 		})
-		list.innerHTML += '</p>';
-		window.document.body.appendChild(list);
 	}
 
-	const _addTouchButton  = () => {
-    const { textSelection } = CONF
-		const button = window.document.createElement(textSelection.button.tag)
-		button.innerHTML = textSelection.button.content
-		window.document.body.appendChild(button)
-		return button
+	setWordwrap(wordwrap) {
+		this.wordwrap = wordwrap
 	}
 
-	const _touchSupport = () => {
-		return ('ontouchstart' in window || navigator.maxTouchPoints) // works on IE10/11 and Surface
+	setAutospeak(autospeak) {
+		this.autospeak = autospeak
 	}
 
-	const _getSelectedText = () => {
-    const { textSelection } = CONF
-		if(textSelection.wordwrap) rangy.getSelection().expand('word') // expand selection to word so that we don't have half words
-	  return rangy.getSelection().toString()
+	speakSelectedText(options = {}) {
+		const text = this.getSelectedText()
+		return this.speak({
+			text,
+			queue: false,
+			...options
+		})
 	}
 
-	return {
-		init: _init,
-		browserSupport: Speak.browserSupport,
-    getSpeakInstance: () => Speak
+	getSelectedText() {
+		const selection = rangy.getSelection()
+		if(this.wordwrap && selection.toString()) selection.expand('word') // expand selection to word so that we don't have half words
+		return selection.toString()
 	}
-})(window);
+}
 
-export default Speech
+export default SelectAndSpeak
