@@ -13,8 +13,8 @@ const _addVoicesList = (voices) => {
 function _init() {
 	const speech = new SelectAndSpeak()
 	speech.init({
-		wordwrap: false,
-    autospeak: false
+		wordwrap: true,
+    autospeak: true
 	}).then((data) => {
 		_addVoicesList(data.voices)
 		_prepareSpeakButton(speech)

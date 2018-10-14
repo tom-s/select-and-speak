@@ -15,7 +15,7 @@ See browser support here : http://caniuse.com/#feat=speech-synthesis
 
 ## Demo
 
-[Here](http://experiments.thomschell.com/select-and-speak/demo/dist)
+[Here](https://codesandbox.io/s/4zyjl7w0o0)
 
 ## Usage
 
